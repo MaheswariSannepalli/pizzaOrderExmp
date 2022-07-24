@@ -10,44 +10,106 @@ import java.util.Queue;
 import java.util.TreeMap;
 
 //class function - setting user details along with their addresses and cart details
+//class is open for extension
 class UserDetails{
-	public Integer u_id;
-	public String name;
-	public Integer age;
-	public Integer phn_num;
+	private Integer u_id;
+	private String name;
+	private Integer age;
+	private Integer phn_num;
 	private static int id = 0;
-	public UserDetails(String name,Integer age,Integer phn_num)
+	public UserDetails()
 	{
 		id ++;
 		this.u_id =  id  ;
+	}
+	public Integer getU_id()
+	{
+		return u_id ;
+	}
+	public void setName(String name)
+	{
 		this.name = name ;
+	}
+	public String getName()
+	{
+		return name ;
+	}
+	public void setAge(Integer age)
+	{
 		this.age = age ;
+	}
+	public Integer getAge()
+	{
+		return age ;
+	}
+	public void setPhn_num(Integer phn_num)
+	{
 		this.phn_num = phn_num ;
+	}
+	public Integer getPhn_num()
+	{
+		return phn_num ;
 	}
 	//a single User can have multiple addresses using this class , if we create outer class or another method inside this class user can't have multiple addresses 
 	//here userAddress cannot exist without User (it's part of user details), so a strong association , composition exists between them
 	public class UserAddress{
-		public Integer a_id;
-		public String city;
-		public String state ; 
-		public Integer pin_code;
-		public UserAddress(String city , String state , Integer pin_code)
+		private Integer a_id;
+		private String city;
+		private String state ; 
+		private Integer pin_code;
+		public UserAddress()
 		{
 			id ++;
 			this.a_id = id ;
-			this.city= city;
-			this.state = state ;
+		}
+		public Integer getA_id()
+		{
+			return a_id ;
+		}
+		public void setCity(String city)
+		{
+			this.city = city ;
+		}
+		public String getCity()
+		{
+			return city ;
+		}
+		public void setState(String state)
+		{
+			this.state= state ;
+		}
+		public String getState()
+		{
+			return state ;
+		}
+		public void setPin_code(Integer pin_code)
+		{
 			this.pin_code = pin_code ;
+		}
+		public Integer getPin_code()
+		{
+			return pin_code ;
 		}
 	}
 	//cart cannot exist without a user object
 	public class Cart{
-		public String item;
-		public String size;
-		public Cart(String item,String size)
+		private String item;
+		private String size;
+		public void setItem(String item)
 		{
 			this.item = item ;
-			this.size = size ;
+		}
+		public String getItem()
+		{
+			return item ;
+		}
+		public void setSize(String size)
+		{
+			this.size= size ;
+		}
+		public String getSize()
+		{
+			return size ;
 		}
 	}
 }
@@ -149,17 +211,51 @@ class PlaceOrder {
 	//a private inner class because no one should be able to access it directly and only if user places an order order details should be  saved
 	 private class SaveOrderDetails
 	{
-		public Integer user_id ;
-		public Integer address_id ;
-		public String item ;
-		public String size ;
-		public Integer price ;
-		SaveOrderDetails(Integer user_id ,Integer address_id ,String item , String size ,Integer price){
+		private Integer user_id ;
+		private Integer address_id ;
+		private String item ;
+		private String size ;
+		private Integer price ;
+
+		public void setUser_id(Integer user_id)
+		{
 			this.user_id = user_id ;
+		}
+		public Integer getUser_id()
+		{
+			return user_id ;
+		}
+		public void setAddress_id(Integer address_id)
+		{
 			this.address_id = address_id ;
-			this.item  = item ;
-			this.size  = size ;
+		}
+		public Integer getAddress_id()
+		{
+			return address_id ;
+		}
+		public void setItem(String item)
+		{
+			this.item = item ;
+		}
+		public String getItem()
+		{
+			return item ;
+		}
+		public void setSize(String size)
+		{
+			this.size = size ;
+		}
+		public String getSize()
+		{
+			return size ;
+		}
+		public void setprice(Integer price)
+		{
 			this.price = price ;
+		}
+		public Integer getprice()
+		{
+			return price ;
 		}
 	}
 	 //queue is used here because it follows fifo . and all orders should be taken in that order
@@ -175,12 +271,17 @@ class PlaceOrder {
  		  while(itr.hasNext())
 		  {
 			  UserDetails.Cart userOrder = (UserDetails.Cart) itr.next() ;
-			  each_order_price = order(userOrder.item,userOrder.size) ;  
+			  each_order_price = order(userOrder.getItem(),userOrder.getSize()) ;  
 			  if(each_order_price > 0) 
 			  {
 		     	  totalPrice = totalPrice + each_order_price ;
 		     	//  saving details
-		     	 SaveOrderDetails d1 = new SaveOrderDetails(user_id ,address_id , userOrder.item,userOrder.size ,each_order_price);
+		     	 SaveOrderDetails d1 = new SaveOrderDetails();
+		     	 d1.setUser_id(user_id);
+		     	 d1.setAddress_id(address_id);
+		     	 d1.setItem(userOrder.getItem());
+		     	 d1.setSize(userOrder.getSize());
+		     	 d1.setprice(each_order_price);
 		     	orderQueue.add(d1);
 			  }
 		  }
@@ -207,10 +308,7 @@ class PlaceOrder {
    			System.out.println(e.getMessage());
    	    	System.out.println(e.getCause().getMessage());
    		}
-   		finally {
-   			//price must be returned if an error is thrown or not
-   			return price;
-   		}
+   		return price;
 	}	
 }
 
@@ -222,21 +320,34 @@ public class User {
 		Map<UserDetails,ArrayList<UserDetails.UserAddress>> userData = new HashMap<UserDetails,ArrayList<UserDetails.UserAddress>>();
 		
 		//user 1 entering details
-		UserDetails user1 = new UserDetails("maheswari",19,987632255);
-		UserDetails.UserAddress address1 = user1.new UserAddress("west godavari","andhra",507121);
+		UserDetails user1 = new UserDetails();
+		user1.setName("maheswari");
+		user1.setAge(19);
+		user1.setPhn_num(987233561);
+		UserDetails.UserAddress address1 = user1.new UserAddress();
+		address1.setCity("west godavari");
+		address1.setState("andhra");
+		address1.setPin_code(507121);
 		//ArrayLists are used as they take less time for adding 
 		ArrayList<UserDetails.UserAddress> user1Addresses = new ArrayList<UserDetails.UserAddress>();
 		user1Addresses.add(address1);
 		userData.put(user1, user1Addresses) ; 
 		
 		//user1 adding new address
-		UserDetails.UserAddress address2 = user1.new UserAddress("west godavari","andhra",507121);
+		UserDetails.UserAddress address2 = user1.new UserAddress();
+		address2.setCity("west godavari");
+		address2.setState("andhra");
+		address2.setPin_code(507121);
 		user1Addresses.add(address2);
 		userData.put(user1, user1Addresses);
 		
 		//user1 selecting items
-		UserDetails.Cart order1 = user1.new Cart("margherita","small");
-		UserDetails.Cart order2 = user1.new Cart("margherita","extra large");
+		UserDetails.Cart order1 = user1.new Cart();
+		order1.setItem("margherita");
+		order1.setSize("small");
+		UserDetails.Cart order2 = user1.new Cart();
+		order2.setItem("margherita");
+		order2.setSize("extra large");
 		
 		//adding items to cart to order
 		ArrayList<UserDetails.Cart> user1Cart = new ArrayList<UserDetails.Cart>();
@@ -245,31 +356,41 @@ public class User {
 		
 		//placing order
 		 PlaceOrder o1  = new  PlaceOrder();
-		 o1.orderAll(user1.u_id, address1.a_id, user1Cart);
+		 o1.orderAll(user1.getU_id(), address1.getA_id(), user1Cart);
 		 
 		 //removing elements of array list using removeAll() method
 		 user1Cart.removeAll(user1Cart);
-		 System.out.println(user1.name+ " cart cleared ");
+		 System.out.println(user1.getName()+ " cart cleared ");
 		 
 		 //searching for an element in hash map
 		System.out.println(Availability.searchForPizza("margherita"));
 		
 		 //user2
-		 UserDetails user2 = new UserDetails("mahi",19,987632255);
-		 UserDetails.UserAddress address3 = user2.new UserAddress("west godavari","andhra",507121);
+		 UserDetails user2 = new UserDetails();
+		 user1.setName("mahi");
+		 user1.setAge(19);
+		 user1.setPhn_num(68233561);
+		 UserDetails.UserAddress address3 = user2.new UserAddress();
+		 address3.setCity("west godavari");
+		 address3.setState("andhra");
+		 address3.setPin_code(507121);
 		 ArrayList<UserDetails.UserAddress> user2Addresses = new ArrayList<UserDetails.UserAddress>();
 		 user2Addresses.add(address3);
 		 userData.put(user2, user2Addresses) ; 
 		 
-		 UserDetails.Cart order3 = user2.new Cart("margherita","small");
-		 UserDetails.Cart order4 = user2.new Cart("golden corn","large");
+		 UserDetails.Cart order3 = user2.new Cart();
+		 order3.setItem("margherita");
+		 order3.setSize("small");
+		 UserDetails.Cart order4 = user2.new Cart();
+		 order4.setItem("golden corn");
+		 order4.setSize("large");
 			
 			ArrayList<UserDetails.Cart> user2Cart = new ArrayList<UserDetails.Cart>();
 			user2Cart.add(order3);
 			user2Cart.add(order4);
 			
 			 PlaceOrder o2  = new  PlaceOrder();
-			 o2.orderAll(user2.u_id, address2.a_id, user2Cart);
+			 o2.orderAll(user2.getU_id(), address2.getA_id(), user2Cart);
 			 
 			 //displaying items
 			 showPizzas.display();
