@@ -312,26 +312,35 @@ class PlaceOrder {
 	}	
 }
 
+//class for storing user details
+class storeUserDetails{
+	//hash map must be used , because  If user add a new address then the value will be modified but user remains same and it is faster for adding details 
+	static Map<UserDetails,ArrayList<UserDetails.UserAddress>> userData = new HashMap<UserDetails,ArrayList<UserDetails.UserAddress>>();
+	static void saved(UserDetails user,ArrayList<UserDetails.UserAddress> address)
+	{
+		userData.put(user, address) ; 
+	}
+}
 public class User {
 
 	public static void main(String[] args)
 	{
-		//hash map must be used , because  If user add a new address then the value will be modified but user remains same and it is faster for adding details 
-		Map<UserDetails,ArrayList<UserDetails.UserAddress>> userData = new HashMap<UserDetails,ArrayList<UserDetails.UserAddress>>();
-		
 		//user 1 entering details
 		UserDetails user1 = new UserDetails();
 		user1.setName("maheswari");
 		user1.setAge(19);
 		user1.setPhn_num(987233561);
+		
 		UserDetails.UserAddress address1 = user1.new UserAddress();
 		address1.setCity("west godavari");
 		address1.setState("andhra");
 		address1.setPin_code(507121);
+		
 		//ArrayLists are used as they take less time for adding 
 		ArrayList<UserDetails.UserAddress> user1Addresses = new ArrayList<UserDetails.UserAddress>();
 		user1Addresses.add(address1);
-		userData.put(user1, user1Addresses) ; 
+		
+		storeUserDetails.saved(user1,user1Addresses);
 		
 		//user1 adding new address
 		UserDetails.UserAddress address2 = user1.new UserAddress();
@@ -339,12 +348,14 @@ public class User {
 		address2.setState("andhra");
 		address2.setPin_code(507121);
 		user1Addresses.add(address2);
-		userData.put(user1, user1Addresses);
+
+		storeUserDetails.saved(user1,user1Addresses);
 		
 		//user1 selecting items
 		UserDetails.Cart order1 = user1.new Cart();
 		order1.setItem("margherita");
 		order1.setSize("small");
+		
 		UserDetails.Cart order2 = user1.new Cart();
 		order2.setItem("margherita");
 		order2.setSize("extra large");
@@ -370,17 +381,21 @@ public class User {
 		 user1.setName("mahi");
 		 user1.setAge(19);
 		 user1.setPhn_num(68233561);
+		 
 		 UserDetails.UserAddress address3 = user2.new UserAddress();
 		 address3.setCity("west godavari");
 		 address3.setState("andhra");
 		 address3.setPin_code(507121);
+		 
 		 ArrayList<UserDetails.UserAddress> user2Addresses = new ArrayList<UserDetails.UserAddress>();
 		 user2Addresses.add(address3);
-		 userData.put(user2, user2Addresses) ; 
+
+		 storeUserDetails.saved(user2,user2Addresses);
 		 
 		 UserDetails.Cart order3 = user2.new Cart();
 		 order3.setItem("margherita");
 		 order3.setSize("small");
+		 
 		 UserDetails.Cart order4 = user2.new Cart();
 		 order4.setItem("golden corn");
 		 order4.setSize("large");
